@@ -1,9 +1,9 @@
 {
     "version": 2,
-    "name": "upgrade-calculators",
+    "name": "game-calculator",
     "builds": [
         {
-            "src": "package.json",
+            "src": "index.html",
             "use": "@vercel/static"
         }
     ],
@@ -12,5 +12,7 @@
             "src": "/(.*)",
             "dest": "/index.html"
         }
-    ]
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false
 }
