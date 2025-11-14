@@ -1,0 +1,45 @@
+@media screen and (max-width: 768px) {
+    .main-layout {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    .side-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 280px;
+        height: 100vh;
+        z-index: 999;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        border-radius: 0;
+    }
+    
+    .main-layout.menu-hidden .side-menu {
+        transform: translateX(-100%);
+    }
+    
+    .main-layout:not(.menu-hidden) .side-menu {
+        transform: translateX(0);
+    }
+    
+    .menu-toggle {
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 1000;
+    }
+
+    .global-language-selector {
+        top: 15px;
+        right: 15px;
+    }
+    
+    .main-categories-grid,
+    .calculators-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Mobil için diğer stiller... */
+}
