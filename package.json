@@ -1,13 +1,8 @@
 {
-    "name": "upgrade-calculators",
+    "name": "game-calculator",
     "version": "1.0.0",
-    "description": "Yükseltme Hesaplayıcıları - Whiteout Survival",
-    "main": "index.html",
     "scripts": {
-        "dev": "python -m http.server 3000",
-        "build": "echo 'No build process needed for static site'"
+        "build": "echo 'No build needed'"
     },
-    "keywords": ["calculator", "game", "upgrade", "whiteout-survival"],
-    "author": "Your Name",
-    "license": "MIT"
+    "devDependencies": {}
 }
