@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yükseltme Hesaplayıcıları</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+
+        .language-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .lang-btn {
+            padding: 8px 20px;
+            border: 2px solid #3498db;
+            background: white;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .lang-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+            border-color: #3498db;
+        }
+
+        .card-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .card-desc {
+            color: #7f8c8d;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .card-features {
+            text-align: left;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .card-features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card-features li {
+            padding: 8px 0;
+            color: #495057;
+            font-size: 0.95rem;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .card-features li:before {
+            content: "✓";
+            color: #2ecc71;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .calculator-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 5px solid #3498db;
+        }
+
+        .calculator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .calculator-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .calculator-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .calculator-desc {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            margin-top: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer-text {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive tasarım */
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .category-card {
+                padding: 20px;
+            }
+        }
+
+        /* Animasyonlar */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .category-card {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .category-card:nth-child(1) { animation-delay: 0.1s; }
+        .category-card:nth-child(2) { animation-delay: 0.2s; }
+        .category-card:nth-child(3) { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏆 Yükseltme Hesaplayıcıları</h1>
+            <p class="subtitle">Oyun içi ekipman yükseltme maliyetlerini kolayca hesaplayın</p>
+            
+            <div class="language-selector">
+                <button class="lang-btn active" onclick="changeLanguage('TR')">Türkçe</button>
+                <button class="lang-btn" onclick="changeLanguage('EN')">English</button>
+            </div>
+        </header>
+
+        <div class="main-grid">
+            <!-- Şef Ekipmanı Kartı -->
+            <div class="category-card" onclick="showCategory('chef-equipment')">
+                <div class="card-icon">⚔️</div>
+                <div class="card-title" id="card1Title">Şef Ekipmanı Yükseltmeleri</div>
+                <div class="card-desc" id="card1Desc">Şef donanım ve tılsım ekipmanlarınızın yükseltme maliyetlerini hesaplayın</div>
+                
+                <div class="card-features">
+                    <ul id="card1Features">
+                        <li>Şef Donanım Yükseltme Hesaplayıcı</li>
+                        <li>Şef Tılsım Yükseltme Hesaplayıcı</li>
+                        <li>Detaylı malzeme hesaplamaları</li>
+                        <li>Çoklu dil desteği</li>
+                    </ul>
+                </div>
+                
+                <div class="calculator-grid">
+                    <div class="calculator-card" onclick="event.stopPropagation(); showCalculator('donanim')">
+                        <div class="calculator-icon">🛡️</div>
+                        <div class="calculator-title" id="calc1Title">Şef Donanım Yükseltmesi</div>
+                        <div class="calculator-desc" id="calc1Desc">Ekipman seviyelerini hesapla ve malzeme ihtiyaçlarını gör</div>
+                    </div>
+                    
+                    <div class="calculator-card" onclick="event.stopPropagation(); showCalculator('tilsim')">
+                        <div class="calculator-icon">🔮</div>
+                        <div class="calculator-title" id="calc2Title">Şef Tılsım Yükseltmesi</div>
+                        <div class="calculator-desc" id="calc2Desc">Tılsım seviyelerini hesapla ve malzeme ihtiyaçlarını gör</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diğer Hesaplayıcılar Kartı -->
+            <div class="category-card" onclick="showCategory('other-calculators')">
+                <div class="card-icon">📊</div>
+                <div class="card-title" id="card2Title">Diğer Hesaplayıcılar</div>
+                <div class="card-desc" id="card2Desc">Çeşitli oyun içi hesaplamalar için kullanışlı araçlar</div>
+                
+                <div class="card-features">
+                    <ul id="card2Features">
+                        <li>Kaynak Hesaplayıcı</li>
+                        <li>Zaman Hesaplayıcı</li>
+                        <li>İlerleme Takip</li>
+                        <li>Yakında...</li>
+                    </ul>
+                </div>
+                
+                <div style="text-align: center; padding: 30px; color: #7f8c8d;">
+                    <h3 id="devTitle">🚧 Geliştirme Aşamasında</h3>
+                    <p id="devDesc">Bu kategori yakında kullanıma sunulacak</p>
+                </div>
+            </div>
+
+            <!-- İstatistik Kartı -->
+            <div class="category-card" onclick="showCategory('statistics')">
+                <div class="card-icon">📈</div>
+                <div class="card-title" id="card3Title">İstatistik ve Analiz</div>
+                <div class="card-desc" id="card3Desc">Yükseltme verilerinizi analiz edin ve ilerlemenizi takip edin</div>
+                
+                <div class="card-features">
+                    <ul id="card3Features">
+                        <li>Malzeme İstatistikleri</li>
+                        <li>İlerleme Grafikleri</li>
+                        <li>Zamanlama Analizi</li>
+                        <li>Öneri Sistemi</li>
+                    </ul>
+                </div>
+                
+                <div style="text-align: center; padding: 30px; color: #7f8c8d;">
+                    <h3>📊 Veri Analizi</h3>
+                    <p>Gelecek güncellemelerde eklenecek</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p class="footer-text" id="footerText">Yükseltme Hesaplayıcıları © 2023 - Tüm hakları saklıdır</p>
+        </footer>
+    </div>
+
+    <script>
+        // Dil çevirileri
+        const translations = {
+            TR: {
+                siteTitle: "Yükseltme Hesaplayıcıları",
+                welcomeTitle: "🏆 Yükseltme Hesaplayıcıları",
+                welcomeDesc: "Oyun içi ekipman yükseltme maliyetlerini kolayca hesaplayın",
+                
+                // Kart başlıkları
+                card1Title: "Şef Ekipmanı Yükseltmeleri",
+                card1Desc: "Şef donanım ve tılsım ekipmanlarınızın yükseltme maliyetlerini hesaplayın",
+                card2Title: "Diğer Hesaplayıcılar", 
+                card2Desc: "Çeşitli oyun içi hesaplamalar için kullanışlı araçlar",
+                card3Title: "İstatistik ve Analiz",
+                card3Desc: "Yükseltme verilerinizi analiz edin ve ilerlemenizi takip edin",
+                
+                // Kart özellikleri
+                card1Feature1: "Şef Donanım Yükseltme Hesaplayıcı",
+                card1Feature2: "Şef Tılsım Yükseltme Hesaplayıcı", 
+                card1Feature3: "Detaylı malzeme hesaplamaları",
+                card1Feature4: "Çoklu dil desteği",
+                
+                card2Feature1: "Kaynak Hesaplayıcı",
+                card2Feature2: "Zaman Hesaplayıcı",
+                card2Feature3: "İlerleme Takip", 
+                card2Feature4: "Yakında...",
+                
+                card3Feature1: "Malzeme İstatistikleri",
+                card3Feature2: "İlerleme Grafikleri",
+                card3Feature3: "Zamanlama Analizi", 
+                card3Feature4: "Öneri Sistemi",
+                
+                // Hesaplayıcılar
+                calc1Title: "Şef Donanım Yükseltmesi",
+                calc1Desc: "Ekipman seviyelerini hesapla ve malzeme ihtiyaçlarını gör",
+                calc2Title: "Şef Tılsım Yükseltmesi", 
+                calc2Desc: "Tılsım seviyelerini hesapla ve malzeme ihtiyaçlarını gör",
+                
+                // Geliştirici mesajları
+                devTitle: "🚧 Geliştirme Aşamasında",
+                devDesc: "Bu kategori yakında kullanıma sunulacak",
+                
+                // Footer
+                footerText: "Yükseltme Hesaplayıcıları © 2023 - Tüm hakları saklıdır"
+            },
+            EN: {
+                siteTitle: "Upgrade Calculators",
+                welcomeTitle: "🏆 Upgrade Calculators", 
+                welcomeDesc: "Easily calculate in-game equipment upgrade costs",
+                
+                // Card titles
+                card1Title: "Chief Equipment Upgrades",
+                card1Desc: "Calculate upgrade costs for chief gear and charm equipment",
+                card2Title: "Other Calculators",
+                card2Desc: "Useful tools for various in-game calculations", 
+                card3Title: "Statistics & Analysis",
+                card3Desc: "Analyze your upgrade data and track your progress",
+                
+                // Card features
+                card1Feature1: "Chief Gear Upgrade Calculator",
+                card1Feature2: "Chief Charm Upgrade Calculator",
+                card1Feature3: "Detailed material calculations", 
+                card1Feature4: "Multi-language support",
+                
+                card2Feature1: "Resource Calculator",
+                card2Feature2: "Time Calculator",
+                card2Feature3: "Progress Tracking",
+                card2Feature4: "Coming Soon...",
+                
+                card3Feature1: "Material Statistics",
+                card3Feature2: "Progress Charts",
+                card3Feature3: "Timing Analysis", 
+                card3Feature4: "Recommendation System",
+                
+                // Calculators
+                calc1Title: "Chief Gear Upgrade",
+                calc1Desc: "Calculate equipment levels and view material requirements",
+                calc2Title: "Chief Charm Upgrade",
+                calc2Desc: "Calculate charm levels and view material requirements",
+                
+                // Developer messages
+                devTitle: "🚧 Under Development", 
+                devDesc: "This category will be available soon",
+                
+                // Footer
+                footerText: "Upgrade Calculators © 2023 - All rights reserved"
+            }
+        };
+
+        let currentLanguage = 'TR';
+
+        // Dil değiştirme fonksiyonu
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Dil butonlarını güncelle
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === (lang === 'TR' ? 'Türkçe' : 'English')) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Tüm siteyi güncelle
+            updateSiteLanguage();
+        }
+
+        // Site dilini güncelle
+        function updateSiteLanguage() {
+            const t = translations[currentLanguage];
+            
+            // Site başlığı
+            document.title = t.siteTitle;
+            document.getElementById('welcomeTitle').textContent = t.welcomeTitle;
+            document.getElementById('welcomeDesc').textContent = t.welcomeDesc;
+            
+            // Kart başlıkları
+            document.getElementById('card1Title').textContent = t.card1Title;
+            document.getElementById('card1Desc').textContent = t.card1Desc;
+            document.getElementById('card2Title').textContent = t.card2Title;
+            document.getElementById('card2Desc').textContent = t.card2Desc;
+            document.getElementById('card3Title').textContent = t.card3Title;
+            document.getElementById('card3Desc').textContent = t.card3Desc;
+            
+            // Kart özellikleri
+            updateCardFeatures(t);
+            
+            // Hesaplayıcılar
+            document.getElementById('calc1Title').textContent = t.calc1Title;
+            document.getElementById('calc1Desc').textContent = t.calc1Desc;
+            document.getElementById('calc2Title').textContent = t.calc2Title;
+            document.getElementById('calc2Desc').textContent = t.calc2Desc;
+            
+            // Geliştirici mesajları
+            document.getElementById('devTitle').textContent = t.devTitle;
+            document.getElementById('devDesc').textContent = t.devDesc;
+            
+            // Footer
+            document.getElementById('footerText').textContent = t.footerText;
+        }
+
+        // Kart özelliklerini güncelle
+        function updateCardFeatures(t) {
+            // Kart 1 özellikleri
+            const card1Features = document.getElementById('card1Features');
+            card1Features.innerHTML = `
+                <li>${t.card1Feature1}</li>
+                <li>${t.card1Feature2}</li>
+                <li>${t.card1Feature3}</li>
+                <li>${t.card1Feature4}</li>
+            `;
+            
+            // Kart 2 özellikleri
+            const card2Features = document.getElementById('card2Features');
+            card2Features.innerHTML = `
+                <li>${t.card2Feature1}</li>
+                <li>${t.card2Feature2}</li>
+                <li>${t.card2Feature3}</li>
+                <li>${t.card2Feature4}</li>
+            `;
+            
+            // Kart 3 özellikleri
+            const card3Features = document.getElementById('card3Features');
+            card3Features.innerHTML = `
+                <li>${t.card3Feature1}</li>
+                <li>${t.card3Feature2}</li>
+                <li>${t.card3Feature3}</li>
+                <li>${t.card3Feature4}</li>
+            `;
+        }
+
+        // Kategori göster (gerçek uygulamada sayfa yönlendirmesi yapılabilir)
+        function showCategory(categoryId) {
+            alert(`${categoryId} kategorisi seçildi! Gerçek uygulamada burada sayfa yönlendirmesi yapılacak.`);
+        }
+
+        // Hesaplayıcı göster (gerçek uygulamada sayfa yönlendirmesi yapılabilir)
+        function showCalculator(calculatorId) {
+            alert(`${calculatorId} hesaplayıcısı açılıyor! Gerçek uygulamada burada hesaplayıcı sayfasına yönlendirme yapılacak.`);
+        }
+
+        // Sayfa yüklendiğinde dili başlat
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSiteLanguage();
+        });
+    </script>
+</body>
+</html>
