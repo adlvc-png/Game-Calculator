@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hesaplayıcılar</title>
+    <style>
+        /* ... (önceki CSS kodunuz aynen kalacak) ... */
+        
+        /* Alt kartlar için ek CSS */
+        .category-section {
+            margin-bottom: 40px;
+        }
+        
+        .category-title {
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .sub-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .sub-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            text-align: center;
+            border: 2px solid transparent;
+        }
+        
+        .sub-card:hover {
+            transform: translateY(-5px);
+            border-color: #3498db;
+            text-decoration: none;
+        }
+        
+        .sub-card-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .sub-card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .sub-card-desc {
+            color: #7f8c8d;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Menü Butonu -->
+        <button class="menu-toggle" id="menuToggle">☰</button>
+
+        <!-- Sol Menü -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">🏹 Hesaplayıcılar</div>
+            </div>
+            
+            <div class="nav-categories">
+                <!-- Şef Ekipmanı -->
+                <div class="nav-category">
+                    <div class="nav-category-text">🛡️ Şef Ekipmanı</div>
+                </div>
+                <div class="nav-subcategories">
+                    <a href="Şef Donanımı.html" class="nav-subcategory">Şef Donanımı Hesaplayıcı</a>
+                    <a href="Şef Tılsımı.html" class="nav-subcategory">Şef Tılsımı Hesaplayıcı</a>
+                </div>
+
+                <!-- Kahraman Donanımı -->
+                <div class="nav-category">
+                    <div class="nav-category-text">⚔️ Kahraman Donanımı</div>
+                </div>
+                <div class="nav-subcategories">
+                    <a href="Kahraman Donanımı.html" class="nav-subcategory">Mitik ve Efsanevi Donanım Hesaplayıcı</a>
+                </div>
+
+                <!-- Birlik Formasyonu -->
+                <div class="nav-category">
+                    <div class="nav-category-text">🎯 Birlik Formasyonu</div>
+                </div>
+                <div class="nav-subcategories">
+                    <a href="Formasyon Hesaplayıcı.html" class="nav-subcategory">Formasyon Hesaplayıcı</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ana İçerik -->
+        <div class="main-content" id="mainContent">
+            <div class="header">
+                <h1>Hesaplayıcılar</h1>
+                <p>İhtiyacınız olan hesaplayıcıyı seçin</p>
+            </div>
+
+            <!-- Kategori: Şef Ekipmanı -->
+            <div class="category-section">
+                <h2 class="category-title">🛡️ Şef Ekipmanı</h2>
+                <div class="sub-cards">
+                    <a href="Şef Donanımı.html" class="sub-card">
+                        <div class="sub-card-icon">🛡️</div>
+                        <div class="sub-card-title">Şef Donanımı Hesaplayıcı</div>
+                        <div class="sub-card-desc">Şef donanımı yükseltme maliyetlerini hesaplayın</div>
+                    </a>
+                    <a href="Şef Tılsımı.html" class="sub-card">
+                        <div class="sub-card-icon">🔮</div>
+                        <div class="sub-card-title">Şef Tılsımı Hesaplayıcı</div>
+                        <div class="sub-card-desc">Şef tılsımı geliştirme hesaplamaları</div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Kategori: Kahraman Donanımı -->
+            <div class="category-section">
+                <h2 class="category-title">⚔️ Kahraman Donanımı</h2>
+                <div class="sub-cards">
+                    <a href="Kahraman Donanımı.html" class="sub-card">
+                        <div class="sub-card-icon">⚔️</div>
+                        <div class="sub-card-title">Mitik ve Efsanevi Donanım</div>
+                        <div class="sub-card-desc">Mitik ve efsanevi donanım geliştirme hesaplamaları</div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Kategori: Birlik Formasyonu -->
+            <div class="category-section">
+                <h2 class="category-title">🎯 Birlik Formasyonu</h2>
+                <div class="sub-cards">
+                    <a href="Formasyon Hesaplayıcı.html" class="sub-card">
+                        <div class="sub-card-icon">🎯</div>
+                        <div class="sub-card-title">Formasyon Hesaplayıcı</div>
+                        <div class="sub-card-desc">Askeri birlik formasyonu ve dağılım hesaplamaları</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Menü kontrolleri önceki gibi kalacak
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const navCategories = document.querySelectorAll('.nav-category');
+
+        function toggleMenu() {
+            sidebar.classList.toggle('open');
+            mainContent.classList.toggle('expanded');
+        }
+
+        menuToggle.addEventListener('click', toggleMenu);
+
+        navCategories.forEach(category => {
+            category.addEventListener('click', () => {
+                const subCategory = category.nextElementSibling;
+                if (subCategory && subCategory.classList.contains('nav-subcategories')) {
+                    subCategory.classList.toggle('active');
+                }
+                if (window.innerWidth <= 768) {
+                    toggleMenu();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
