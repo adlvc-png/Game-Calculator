@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hesaplayıcılar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            color: white;
+            padding-top: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        /* Kategori Bölümleri */
+        .category-section {
+            margin-bottom: 50px;
+        }
+        
+        .category-title {
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            text-align: center;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        
+        /* Alt Kartlar */
+        .sub-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .sub-card {
+            display: block;
+            text-decoration: none;
+            background: white;
+            border-radius: 16px;
+            padding: 30px 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            text-align: center;
+            border: 3px solid transparent;
+            cursor: pointer;
+        }
+        
+        .sub-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border-color: #3498db;
+            text-decoration: none;
+        }
+        
+        .sub-card-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .sub-card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 12px;
+        }
+        
+        .sub-card-desc {
+            color: #7f8c8d;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        /* Proje Bilgisi */
+        .project-info {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 50px;
+            color: white;
+            text-align: center;
+        }
+
+        .project-info h3 {
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .sub-cards {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .sub-card {
+                padding: 25px 20px;
+            }
+            
+            .category-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header {
+                padding-top: 20px;
+                margin-bottom: 30px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .sub-card-icon {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Başlık -->
+        <div class="header">
+            <h1>🏹 Hesaplayıcılar</h1>
+            <p>İhtiyacınız olan hesaplayıcıyı seçin</p>
+        </div>
+
+        <!-- Kategori: Şef Ekipmanı -->
+        <div class="category-section">
+            <h2 class="category-title">🛡️ Şef Ekipmanı</h2>
+            <div class="sub-cards">
+                <a href="Şef%20Donanımı.html" class="sub-card">
+                    <div class="sub-card-icon">🛡️</div>
+                    <div class="sub-card-title">Şef Donanımı Hesaplayıcı</div>
+                    <div class="sub-card-desc">Şef donanımı yükseltme maliyetlerini hesaplayın</div>
+                </a>
+                <a href="Şef%20Tılsımı.html" class="sub-card">
+                    <div class="sub-card-icon">🔮</div>
+                    <div class="sub-card-title">Şef Tılsımı Hesaplayıcı</div>
+                    <div class="sub-card-desc">Şef tılsımı geliştirme hesaplamaları</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Kategori: Kahraman Donanımı -->
+        <div class="category-section">
+            <h2 class="category-title">⚔️ Kahraman Donanımı</h2>
+            <div class="sub-cards">
+                <a href="Kahraman%20Donanımı.html" class="sub-card">
+                    <div class="sub-card-icon">⚔️</div>
+                    <div class="sub-card-title">Mitik ve Efsanevi Donanım</div>
+                    <div class="sub-card-desc">Mitik ve efsanevi donanım geliştirme hesaplamaları</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Kategori: Birlik Formasyonu -->
+        <div class="category-section">
+            <h2 class="category-title">🎯 Birlik Formasyonu</h2>
+            <div class="sub-cards">
+                <a href="Formasyon%20Hesaplayıcı.html" class="sub-card">
+                    <div class="sub-card-icon">🎯</div>
+                    <div class="sub-card-title">Formasyon Hesaplayıcı</div>
+                    <div class="sub-card-desc">Askeri birlik formasyonu ve dağılım hesaplamaları</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Proje Bilgisi -->
+        <div class="project-info">
+            <h3>📋 Proje Hakkında</h3>
+            <p>Bu proje, oyun içi çeşitli hesaplamaları kolaylaştırmak için geliştirilmiş araçlar içerir.</p>
+            <p style="margin-top: 10px; opacity: 0.8;">Tüm hesaplayıcılar bağımsız olarak çalışır ve güncellenebilir.</p>
+        </div>
+    </div>
+
+    <script>
+        // Sayfa yüklendiğinde konsola bilgi ver
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Hesaplayıcılar Ana Sayfası Yüklendi!');
+            console.log('✅ Tüm linkler Vercel için optimize edildi');
+        });
+    </script>
+</body>
+</html>
