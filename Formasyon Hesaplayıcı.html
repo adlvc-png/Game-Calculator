@@ -536,7 +536,7 @@
 
                 <div class="input-group">
                     <label for="squad-count">Ekip Sayısı:</label>
-                    <select id="squad-count" onchange="updateSquadCount()">
+                    <select id="squad-count">
                         <option value="1">1 Ekip</option>
                         <option value="2">2 Ekip</option>
                         <option value="3">3 Ekip</option>
@@ -580,8 +580,8 @@
                 </div>
 
                 <div class="action-buttons">
-                    <button class="btn btn-primary" onclick="calculateFormation()">Hesapla</button>
-                    <button class="btn btn-secondary" onclick="resetForm()">Sıfırla</button>
+                    <button class="btn btn-primary" id="calculate-btn">Hesapla</button>
+                    <button class="btn btn-secondary" id="reset-btn">Sıfırla</button>
                 </div>
             </div>
 
@@ -596,7 +596,7 @@
                             <label for="quick-capacity">Tüm Ekiplere Kapasite:</label>
                             <input type="number" id="quick-capacity" placeholder="Kapasite" min="0">
                         </div>
-                        <button class="btn-small" onclick="applyToAll()">Tümüne Uygula</button>
+                        <button class="btn-small" id="apply-all-btn">Tümüne Uygula</button>
                     </div>
                 </div>
 
@@ -630,242 +630,45 @@
                         <div class="result-value" id="archer-status">-</div>
                     </div>
                 </div>
-
-                <!-- Toplam durum kısmı kaldırıldı -->
             </div>
         </div>
     </div>
 
     <script>
-        // Binlik ayracı fonksiyonu
+        // ==================== DEĞİŞKENLER ====================
+        const defaultSquadCapacities = [1250, 1250, 1250, 1250, 1250, 1250, 1250, 1250];
+        let currentSquadCount = 8;
+        let savedCapacities = [...defaultSquadCapacities];
+
+        // ==================== YARDIMCI FONKSİYONLAR ====================
         function formatNumber(num) {
             return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
 
-        // Varsayılan ekip kapasiteleri
-        const defaultSquadCapacities = [1250, 1250, 1250, 1250, 1250, 1250, 1250, 1250];
-        let currentSquadCount = 8;
+        function saveCurrentCapacities() {
+            savedCapacities = [];
+            for (let i = 1; i <= currentSquadCount; i++) {
+                const input = document.getElementById(`squad-${i}`);
+                if (input) {
+                    savedCapacities.push(parseInt(input.value) || 1250);
+                }
+            }
+        }
 
-        // Ekip sayısını güncelle
+        function getSavedCapacity(index) {
+            if (index < savedCapacities.length) {
+                return savedCapacities[index];
+            }
+            return 1250; // Varsayılan değer
+        }
+
+        // ==================== EKİP KAPASİTELERİNİ YÖNET ====================
         function updateSquadCount() {
+            // Önce mevcut değerleri kaydet
+            saveCurrentCapacities();
+            
+            // Yeni ekip sayısını al
             currentSquadCount = parseInt(document.getElementById('squad-count').value);
-            initializeSquadCapacities();
-        }
-
-        // Sayfa yüklendiğinde ekip kapasitelerini oluştur
-        function initializeSquadCapacities() {
-            const container = document.getElementById('squad-capacity-container');
-            container.innerHTML = '';
-
-            // Responsive grid columns
-            let gridColumns = 4;
-            if (window.innerWidth <= 768) gridColumns = 2;
-            if (window.innerWidth <= 480) gridColumns = 1;
-            if (currentSquadCount < gridColumns) gridColumns = currentSquadCount;
             
-            container.style.gridTemplateColumns = `repeat(${gridColumns}, 1fr)`;
-
-            for (let i = 0; i < currentSquadCount; i++) {
-                const capacity = i < defaultSquadCapacities.length ? defaultSquadCapacities[i] : 1250;
-                const squadItem = `
-                    <div class="squad-capacity-item">
-                        <label for="squad-${i+1}">Ekip ${i+1}</label>
-                        <input type="number" id="squad-${i+1}" value="${capacity}" min="0" placeholder="Kapasite">
-                    </div>
-                `;
-                container.innerHTML += squadItem;
-            }
-
-            // Ekip sayısını göster
-            document.getElementById('squad-count-display').textContent = currentSquadCount;
-        }
-
-        // Tüm ekiplere aynı kapasiteyi uygula
-        function applyToAll() {
-            const quickCapacity = parseInt(document.getElementById('quick-capacity').value) || 0;
-            
-            if (quickCapacity === 0) {
-                alert('Lütfen geçerli bir kapasite girin!');
-                return;
-            }
-
-            for (let i = 1; i <= currentSquadCount; i++) {
-                document.getElementById(`squad-${i}`).value = quickCapacity;
-            }
-
-            // Hızlı geri bildirim
-            const quickInput = document.getElementById('quick-capacity');
-            quickInput.style.borderColor = '#28a745';
-            quickInput.style.background = '#f8fff9';
-            
-            setTimeout(() => {
-                quickInput.style.borderColor = '#ced4da';
-                quickInput.style.background = 'white';
-            }, 1000);
-        }
-
-        // Hesaplama fonksiyonu
-        function calculateFormation() {
-            // Ekip kapasitelerini al
-            const squadCapacities = [];
-            let totalCapacity = 0;
-            
-            for (let i = 1; i <= currentSquadCount; i++) {
-                const capacity = parseInt(document.getElementById(`squad-${i}`).value) || 0;
-                squadCapacities.push(capacity);
-                totalCapacity += capacity;
-            }
-
-            // Mevcut askerleri al
-            const availableInfantry = parseInt(document.getElementById('infantry').value) || 0;
-            const availableSpearman = parseInt(document.getElementById('spearman').value) || 0;
-            const availableArcher = parseInt(document.getElementById('archer').value) || 0;
-            
-            // Yüzdeleri al
-            const infantryPercent = parseInt(document.getElementById('infantry-percent').value) || 0;
-            const spearmanPercent = parseInt(document.getElementById('spearman-percent').value) || 0;
-            const archerPercent = parseInt(document.getElementById('archer-percent').value) || 0;
-
-            // Yüzde toplamını kontrol et
-            const totalPercent = infantryPercent + spearmanPercent + archerPercent;
-            if (totalPercent !== 100) {
-                alert('Yüzde toplamı 100 olmalıdır! Şu an: ' + totalPercent + '%');
-                return;
-            }
-
-            // Toplam kapasiteyi göster
-            document.getElementById('total-capacity').textContent = formatNumber(totalCapacity);
-            document.getElementById('squad-count-display').textContent = currentSquadCount;
-
-            // Her ekip için asker dağılımını hesapla ve toplam gereken askerleri bul
-            let totalRequiredInfantry = 0;
-            let totalRequiredSpearman = 0;
-            let totalRequiredArcher = 0;
-            const squadData = [];
-
-            for (let i = 0; i < currentSquadCount; i++) {
-                const capacity = squadCapacities[i];
-                const infantry = Math.round(capacity * infantryPercent / 100);
-                const spearman = Math.round(capacity * spearmanPercent / 100);
-                const archer = Math.round(capacity * archerPercent / 100);
-                
-                totalRequiredInfantry += infantry;
-                totalRequiredSpearman += spearman;
-                totalRequiredArcher += archer;
-
-                squadData.push({
-                    infantry: infantry,
-                    spearman: spearman,
-                    archer: archer,
-                    capacity: capacity,
-                    total: infantry + spearman + archer
-                });
-            }
-
-            // Ekip bilgilerini göster
-            displaySquads(squadData);
-
-            // Durum analizini hesapla
-            calculateStatus(availableInfantry, availableSpearman, availableArcher, 
-                          totalRequiredInfantry, totalRequiredSpearman, totalRequiredArcher);
-        }
-
-        // Ekip bilgilerini göster
-        function displaySquads(squadData) {
-            const container = document.getElementById('squads-container');
-            container.innerHTML = '';
-
-            // Responsive grid columns
-            let gridColumns = 4;
-            if (window.innerWidth <= 768) gridColumns = 2;
-            if (window.innerWidth <= 480) gridColumns = 1;
-            if (currentSquadCount < gridColumns) gridColumns = currentSquadCount;
-            
-            container.style.gridTemplateColumns = `repeat(${gridColumns}, 1fr)`;
-
-            squadData.forEach((squad, index) => {
-                const squadCard = `
-                    <div class="squad-card">
-                        <div class="squad-title">Ekip ${index + 1}</div>
-                        <div class="squad-numbers">
-                            Piyade: ${formatNumber(squad.infantry)}<br>
-                            Mızrakçı: ${formatNumber(squad.spearman)}<br>
-                            Nişancı: ${formatNumber(squad.archer)}
-                        </div>
-                        <div class="squad-total">
-                            ${formatNumber(squad.total)} / ${formatNumber(squad.capacity)}
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += squadCard;
-            });
-        }
-
-        // Durum analizini hesapla ve göster
-        function calculateStatus(availableInf, availableSpe, availableArc, requiredInf, requiredSpe, requiredArc) {
-            // Piyade durumu
-            const infDifference = availableInf - requiredInf;
-            const infElement = document.getElementById('infantry-status');
-            infElement.textContent = formatNumber(Math.abs(infDifference));
-            infElement.className = 'result-value ' + (infDifference >= 0 ? 'positive' : 'negative');
-            if (infDifference > 0) {
-                infElement.textContent = '+' + formatNumber(infDifference);
-            } else if (infDifference < 0) {
-                infElement.textContent = '-' + formatNumber(Math.abs(infDifference));
-            }
-
-            // Mızrakçı durumu
-            const speDifference = availableSpe - requiredSpe;
-            const speElement = document.getElementById('spearman-status');
-            speElement.textContent = formatNumber(Math.abs(speDifference));
-            speElement.className = 'result-value ' + (speDifference >= 0 ? 'positive' : 'negative');
-            if (speDifference > 0) {
-                speElement.textContent = '+' + formatNumber(speDifference);
-            } else if (speDifference < 0) {
-                speElement.textContent = '-' + formatNumber(Math.abs(speDifference));
-            }
-
-            // Nişancı durumu
-            const arcDifference = availableArc - requiredArc;
-            const arcElement = document.getElementById('archer-status');
-            arcElement.textContent = formatNumber(Math.abs(arcDifference));
-            arcElement.className = 'result-value ' + (arcDifference >= 0 ? 'positive' : 'negative');
-            if (arcDifference > 0) {
-                arcElement.textContent = '+' + formatNumber(arcDifference);
-            } else if (arcDifference < 0) {
-                arcElement.textContent = '-' + formatNumber(Math.abs(arcDifference));
-            }
-
-            // Toplam durum kısmı kaldırıldı
-        }
-
-        // Formu sıfırla
-        function resetForm() {
-            document.getElementById('squad-count').value = '8';
-            document.getElementById('infantry').value = '';
-            document.getElementById('spearman').value = '';
-            document.getElementById('archer').value = '';
-            document.getElementById('infantry-percent').value = '40';
-            document.getElementById('spearman-percent').value = '35';
-            document.getElementById('archer-percent').value = '25';
-            document.getElementById('quick-capacity').value = '';
-            
-            // Ekip kapasitelerini varsayılana sıfırla
-            currentSquadCount = 8;
-            initializeSquadCapacities();
-            
-            document.getElementById('total-capacity').textContent = '0';
-            document.getElementById('squads-container').innerHTML = '';
-            document.getElementById('infantry-status').textContent = '-';
-            document.getElementById('spearman-status').textContent = '-';
-            document.getElementById('archer-status').textContent = '-';
-        }
-
-        // Sayfa yüklendiğinde ve pencere boyutu değiştiğinde
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeSquadCapacities();
-            window.addEventListener('resize', initializeSquadCapacities);
-        });
-    </script>
-</body>
-</html>
+            // Yeni kapasiteleri oluştur
+        
