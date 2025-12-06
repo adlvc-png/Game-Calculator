@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hesaplayıcılar</title>
     <style>
+        /* TÜM CSS KODU - TEK DOSYADA */
         * {
             margin: 0;
             padding: 0;
@@ -19,207 +20,768 @@
             overflow-x: hidden;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        /* Ana Layout */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* Sol Menü */
+        .sidebar {
+            width: 280px;
+            background: #2c3e50;
+            color: white;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar.open {
+            transform: translateX(0);
+        }
+
+        .sidebar-header {
             padding: 20px;
+            border-bottom: 1px solid #34495e;
+            text-align: center;
+        }
+
+        .sidebar-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ecf0f1;
+        }
+
+        .nav-categories {
+            padding: 15px 0;
+        }
+
+        .nav-category {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-category:hover {
+            background: #34495e;
+        }
+
+        .nav-category.active {
+            background: #3498db;
+            border-left-color: #2980b9;
+        }
+
+        .nav-category-text {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .nav-subcategories {
+            background: #34495e;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .nav-subcategories.active {
+            max-height: 200px;
+        }
+
+        .nav-subcategory {
+            padding: 10px 20px 10px 35px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            font-size: 0.9rem;
+        }
+
+        .nav-subcategory:hover {
+            background: #2c3e50;
+            border-left-color: #3498db;
+        }
+
+        .nav-subcategory.active {
+            background: #2980b9;
+            border-left-color: #1f618d;
+        }
+
+        /* Menü Butonu */
+        .menu-toggle {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1100;
+            background: #3498db;
+            border: none;
+            border-radius: 8px;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+        }
+
+        /* Geri Butonu - Üst Sabit */
+        .back-button-top {
+            position: fixed;
+            top: 15px;
+            right: 20px;
+            z-index: 1100;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .back-button-top.visible {
+            display: flex;
+        }
+
+        .back-button-top:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        /* Ana İçerik */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            margin-left: 0;
+            transition: margin-left 0.3s ease;
+            min-height: 100vh;
+        }
+
+        .main-content.expanded {
+            margin-left: 280px;
         }
 
         /* Header */
         .header {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
             color: white;
-            padding-top: 40px;
+            padding-top: 60px;
         }
 
         .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .header p {
-            font-size: 1.3rem;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
             opacity: 0.9;
         }
 
-        /* Kategori Bölümleri */
-        .category-section {
-            margin-bottom: 50px;
-        }
-        
-        .category-title {
-            color: white;
-            font-size: 1.8rem;
-            margin-bottom: 25px;
-            text-align: center;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-        }
-        
-        /* Alt Kartlar */
-        .sub-cards {
+        /* Ana Kartlar */
+        .main-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
         }
-        
-        .sub-card {
-            display: block;
-            text-decoration: none;
+
+        .main-card {
             background: white;
             border-radius: 16px;
-            padding: 30px 25px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            transition: all 0.3s ease;
+            padding: 30px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.4s ease;
             text-align: center;
             border: 3px solid transparent;
-            cursor: pointer;
         }
-        
-        .sub-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+
+        .main-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.3);
             border-color: #3498db;
-            text-decoration: none;
         }
-        
-        .sub-card-icon {
-            font-size: 3.5rem;
+
+        .main-card-icon {
+            font-size: 4rem;
             margin-bottom: 20px;
         }
-        
+
+        .main-card-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .main-card-desc {
+            color: #7f8c8d;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        /* Alt Kategori Kartları */
+        .sub-cards {
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .sub-cards.active {
+            display: grid;
+        }
+
+        .sub-card {
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            border: 2px solid transparent;
+        }
+
+        .sub-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+            border-color: #e74c3c;
+        }
+
+        .sub-card-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
         .sub-card-title {
             font-size: 1.4rem;
             font-weight: 700;
             color: #2c3e50;
-            margin-bottom: 12px;
-        }
-        
-        .sub-card-desc {
-            color: #7f8c8d;
-            line-height: 1.6;
-            font-size: 1rem;
+            margin-bottom: 10px;
         }
 
-        /* Proje Bilgisi */
-        .project-info {
-            background: rgba(255,255,255,0.1);
+        .sub-card-desc {
+            color: #7f8c8d;
+            line-height: 1.5;
+        }
+
+        /* Hesaplayıcı İçeriği */
+        .calculator-content {
+            display: none;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .calculator-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Formasyon Hesaplayıcı Özel Stiller */
+        .formation-container {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .formation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 992px) {
+            .formation-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .formation-section {
+            background: #f8f9fa;
             border-radius: 12px;
             padding: 25px;
-            margin-top: 50px;
-            color: white;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: center;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .percentage-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .percentage-item {
             text-align: center;
         }
 
-        .project-info h3 {
-            margin-bottom: 15px;
-            font-size: 1.4rem;
+        .percentage-item label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9rem;
         }
 
-        /* Responsive */
+        .percentage-item input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ced4da;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .quick-settings {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 2px solid #bbdefb;
+        }
+
+        .quick-settings-title {
+            font-weight: 600;
+            color: #1976d2;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .quick-settings-grid {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .btn-small {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #3498db;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .btn-small:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+        }
+
+        .squad-capacity-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .sub-cards {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .sub-card {
-                padding: 25px 20px;
-            }
-            
-            .category-title {
-                font-size: 1.5rem;
+            .squad-capacity-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 480px) {
-            .container {
-                padding: 15px;
+            .squad-capacity-grid {
+                grid-template-columns: 1fr;
             }
-            
+        }
+
+        .squad-capacity-item {
+            text-align: center;
+        }
+
+        .squad-capacity-item label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.85rem;
+        }
+
+        .squad-capacity-item input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ced4da;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .squad-capacity-item input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .squad-capacity-item input.edited {
+            border-color: #e74c3c;
+            background-color: #fff5f5;
+        }
+
+        .total-capacity-box {
+            background: #e8f5e8;
+            border: 2px solid #c8e6c9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #2e7d32;
+        }
+
+        .squads-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .squads-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .squads-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .squad-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .squad-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .squad-numbers {
+            font-size: 0.8rem;
+            color: #6c757d;
+            line-height: 1.4;
+        }
+
+        .squad-total {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px solid #dee2e6;
+            font-size: 0.9rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .result-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            text-align: center;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .result-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .positive {
+            color: #28a745;
+        }
+
+        .negative {
+            color: #dc3545;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #5a6268);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .breadcrumb span {
+            opacity: 0.8;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .breadcrumb span:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        .breadcrumb .active {
+            opacity: 1;
+            font-weight: 600;
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+            }
+
+            .main-content.expanded {
+                margin-left: 0;
+            }
+
+            .main-cards {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .sub-cards {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .main-card {
+                padding: 25px 20px;
+            }
+
+            .sub-card {
+                padding: 20px 15px;
+            }
+
+            .back-button-top {
+                right: 15px;
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
             .header {
-                padding-top: 20px;
+                padding-top: 50px;
                 margin-bottom: 30px;
             }
-            
-            .header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .sub-card-icon {
-                font-size: 3rem;
+
+            .main-content {
+                padding: 15px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Başlık -->
-        <div class="header">
-            <h1>🏹 Hesaplayıcılar</h1>
-            <p>İhtiyacınız olan hesaplayıcıyı seçin</p>
-        </div>
+    <div class="app-container">
+        <!-- Overlay -->
+        <div class="overlay" id="overlay"></div>
 
-        <!-- Kategori: Şef Ekipmanı -->
-        <div class="category-section">
-            <h2 class="category-title">🛡️ Şef Ekipmanı</h2>
-            <div class="sub-cards">
-                <a href="Şef%20Donanımı.html" class="sub-card">
-                    <div class="sub-card-icon">🛡️</div>
-                    <div class="sub-card-title">Şef Donanımı Hesaplayıcı</div>
-                    <div class="sub-card-desc">Şef donanımı yükseltme maliyetlerini hesaplayın</div>
-                </a>
-                <a href="Şef%20Tılsımı.html" class="sub-card">
-                    <div class="sub-card-icon">🔮</div>
-                    <div class="sub-card-title">Şef Tılsımı Hesaplayıcı</div>
-                    <div class="sub-card-desc">Şef tılsımı geliştirme hesaplamaları</div>
-                </a>
+        <!-- Menü Butonu -->
+        <button class="menu-toggle" id="menuToggle">☰</button>
+
+        <!-- Geri Butonu - Üst -->
+        <button class="back-button-top" id="backButtonTop">← Geri Dön</button>
+
+        <!-- Sol Menü -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">🏹 Hesaplayıcılar</div>
             </div>
-        </div>
+            
+            <div class="nav-categories">
+                <!-- Şef Ekipmanı -->
+                <div class="nav-category" data-category="chief">
+                    <div class="nav-category-text">🛡️ Şef Ekipmanı</div>
+                </div>
+                <div class="nav-subcategories" id="chiefSub">
+                    <div class="nav-subcategory" data-calculator="chiefEquipment">Şef Donanımı Hesaplayıcı</div>
+                    <div class="nav-subcategory" data-calculator="chiefTalisman">Şef Tılsımı Hesaplayıcı</div>
+                </div>
 
-        <!-- Kategori: Kahraman Donanımı -->
-        <div class="category-section">
-            <h2 class="category-title">⚔️ Kahraman Donanımı</h2>
-            <div class="sub-cards">
-                <a href="Kahraman%20Donanımı.html" class="sub-card">
-                    <div class="sub-card-icon">⚔️</div>
-                    <div class="sub-card-title">Mitik ve Efsanevi Donanım</div>
-                    <div class="sub-card-desc">Mitik ve efsanevi donanım geliştirme hesaplamaları</div>
-                </a>
+                <!-- Kahraman Donanımı -->
+                <div class="nav-category" data-category="hero">
+                    <div class="nav-category-text">⚔️ Kahraman Donanımı</div>
+                </div>
+                <div class="nav-subcategories" id="heroSub">
+                    <div class="nav-subcategory" data-calculator="mythicHero">Mitik ve Efsanevi Donanım Hesaplayıcı</div>
+                </div>
+
+                <!-- Birlik Formasyonu -->
+                <div class="nav-category" data-category="formation">
+                    <div class="nav-category-text">🎯 Birlik Formasyonu</div>
+                </div>
+                <div class="nav-subcategories" id="formationSub">
+                    <div class="nav-subcategory" data-calculator="formation">Formasyon Hesaplayıcı</div>
+                </div>
             </div>
-        </div>
-
-        <!-- Kategori: Birlik Formasyonu -->
-        <div class="category-section">
-            <h2 class="category-title">🎯 Birlik Formasyonu</h2>
-            <div class="sub-cards">
-                <a href="Formasyon%20Hesaplayıcı.html" class="sub-card">
-                    <div class="sub-card-icon">🎯</div>
-                    <div class="sub-card-title">Formasyon Hesaplayıcı</div>
-                    <div class="sub-card-desc">Askeri birlik formasyonu ve dağılım hesaplamaları</div>
-                </a>
-            </div>
-        </div>
-
-        <!-- Proje Bilgisi -->
-        <div class="project-info">
-            <h3>📋 Proje Hakkında</h3>
-            <p>Bu proje, oyun içi çeşitli hesaplamaları kolaylaştırmak için geliştirilmiş araçlar içerir.</p>
-            <p style="margin-top: 10px; opacity: 0.8;">Tüm hesaplayıcılar bağımsız olarak çalışır ve güncellenebilir.</p>
-        </div>
-    </div>
-
-    <script>
-        // Sayfa yüklendiğinde konsola bilgi ver
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 Hesaplayıcılar Ana Sayfası Yüklendi!');
-            console.log('✅ Tüm linkler Vercel için optimize edildi');
-        });
-    </script>
-</body>
-</html>
+        </
